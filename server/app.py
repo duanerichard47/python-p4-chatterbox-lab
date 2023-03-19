@@ -31,10 +31,10 @@ def messages():
 
     elif request.method == 'POST':
             new_message = Message(
-                 body=request.form.get("body"),
-                 username=request.form.get("comment"),
-                 created_at=request.form.get("created_at"),
-                 updated_at=request.form.get("updated_at"),               
+                 body=request.json.get("body"),
+                 username=request.json.get("username"),
+                 created_at=request.json.get("created_at"),
+                 updated_at=request.json.get("updated_at")            
             )
             db.session.add(new_message)
             db.session.commit()
@@ -56,8 +56,8 @@ def messages_by_id(id):
     if request.method == 'PATCH':
         message = Message.query.filter(Message.id ==id).first()
 
-        for attr in request.form:
-             setattr(message, attr, request.form.get(attr))
+        for attr in request.json:
+             setattr(message, attr, request.json.get(attr))
 
         db.session.add(message)
         db.session.commit()
@@ -71,6 +71,7 @@ def messages_by_id(id):
         return response
     
     elif request.method == 'DELETE':
+        
         db.session.delete(message)
         db.session.commit()
 
